@@ -8,6 +8,31 @@ public class JdbcDemo {
         selectAllDemo();
     }
 
+    public static void insertStudentDemo(){
+        System.out.println("INSERT DEMO mit JDBC");
+        String insertPerson = "INSERT INTO `student` (`id`, `name`, `email`) VALUES (NULL, ?, ?)";
+        String connectionUrl = "jdbc:mysql://localhost:3306/jdbcdemo";
+        String user = "root";
+        String pwd = "";
+
+        try(Connection conn = DriverManager.getConnection(connectionUrl, user, pwd)) {
+            System.out.println("Verbindung hergestellt!");
+            PreparedStatement preparedStatement = conn.prepareStatement(insertPerson);
+
+            try{
+                preparedStatement.setString(1, "Josef Maier");
+                preparedStatement.setString(2, "jmaier@tsn.at");
+                int rowAffected = preparedStatement.executeUpdate();
+                System.out.println(rowAffected + " Datensätze eingefügt!");
+            } catch (SQLException e){
+                System.out.println("Fehler im SQL-INSERT Statement: " + e.getMessage());
+            }
+
+        } catch (SQLException e){
+            System.out.println("Fehler beim Aufbau der Verbindung zur Datenbank!: " + e.getMessage());
+        }
+    }
+
     public static void selectAllDemo(){
         System.out.println("Select DEMO mit JDBC");
         String sqlSelectAllPersons = "SELECT * FROM `student`";
